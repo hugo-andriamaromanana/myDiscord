@@ -8,7 +8,7 @@ COLORS = {
     'ORANGE': (255, 165, 0),
     'PURPLE': (128, 0, 128),
     'PINK': (255, 192, 203),
-    'LIGHT_BLUE': (173, 216, 230),
+    'LIGHT_BLUE': (88, 101, 242),
     'CLEAR_BLUE': (0, 191, 255),
     'GREY': (128, 128, 128),
     'DARK_GREEN': (0, 100, 0),
@@ -34,4 +34,6 @@ COLORS = {
     'WOOD': (139, 69, 19),
     'WOOD2': (210, 105, 30),
     'DISCORD_BLUE': (114, 137, 218),
+    'DISCORD_GREY': (49, 51, 56),
+    'DISCORD_DARK_GREY': (30, 31, 34),
 }
