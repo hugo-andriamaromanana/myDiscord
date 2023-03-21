@@ -10,6 +10,8 @@ second table: messages
 import sqlite3
 import datetime
 
+
+# yes, i know that this is not the best way to do it, but it works
 class SQL_manager:
   def __init__(self, db_name):
     self.db_name = db_name
