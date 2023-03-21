@@ -52,6 +52,7 @@ def main():
                     print('create account')
                     state = 'create_account'
 
+                #LOGIN CLICK
                 if MOUSEBUTTONDOWN(event) and LOGIN_BUTTON.collidepoint(pygame.mouse.get_pos()):
                     print('username: ', mail_fill)
                     print('password: ', password_fill)
@@ -89,7 +90,8 @@ def main():
                     password_check = False
                     first_name_check = False
                     last_name_check = True
-
+                
+                #REGISTER CLICK
                 if MOUSEBUTTONDOWN(event) and REGISTER_BUTTON.collidepoint(pygame.mouse.get_pos()):
                     print(
                         f'username: {mail_fill} password: {password_fill} first name: {first_name_fill} last name: {last_name_fill}'
