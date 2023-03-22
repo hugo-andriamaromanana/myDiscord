@@ -6,27 +6,44 @@ first table: users
 second table: messages
 
 '''
-
-import sqlite3
+import pypyodbc as pyodbc
 import datetime
-
+connectString = 'Driver={ODBC Driver 18 for SQL Server};Server=tcp:testdiscord.database.windows.net,1433;Database=myDiscord;Uid=enzo_azure;Pwd=Enzane0728*;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
 
 # yes, i know that this is not the best way to do it, but it works
 class SQL_manager:
-  def __init__(self, db_name):
-    self.db_name = db_name
-    self.conn = sqlite3.connect(self.db_name)
+  def __init__(self):
+    self.conn = pyodbc.connect(connectString)
     self.cursor = self.conn.cursor()
-    self.cursor.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, discriminator TEXT, avatar TEXT, bot INTEGER, created_at TEXT, joined_at TEXT, roles TEXT)")
-    self.cursor.execute("CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, author_id INTEGER, content TEXT, created_at TEXT, FOREIGN KEY(author_id) REFERENCES users(id))")
+    # self.cursor.execute("CREATE TABLE IF NOT EXISTS users (id VARCHAR(255), name VARCHAR(255), firstname VARCHAR(255), password VARCHAR(255), email VARCHAR(255))")
+    # 'IF NOT EXISTS' non supporté sur les serveurs Azure    
+    # self.cursor.execute("CREATE TABLE IF NOT EXISTS messages (id VARCHAR(255), author_id VARCHAR(255), content VARCHAR(255), created_at VARCHAR(255))")
     self.conn.commit()
-
-  def add_user(self, user):
-    self.cursor.execute("SELECT * FROM users WHERE id=%s", (user.id,))
-    if self.cursor.fetchone() is None:
-      self.cursor.execute("INSERT INTO users VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (user.id, user.name, user.discriminator, user.avatar, user.bot, user.created_at, user.joined_at, user.roles))
-      self.conn.commit()
-
+    print('SQL manager initialized')
+    
+  def create_user(self, name, lastname, password, email ):
+    if not self.check_user(email):
+        insert_query = "INSERT INTO users (name, firstname, password, email) VALUES (?, ?, ?, ?)"
+        values = (name, lastname, password, email)
+        self.cursor.execute(insert_query, values)
+        self.conn.commit()
+        print("User inserted successfully!")
+    else:
+        print("User already exists.")
+  def check_user(self, email):
+    print(email)
+    self.cursor.execute("SELECT * FROM users WHERE email=?", (email,))
+    if self.cursor.fetchone() is not None:
+      return True
+    else:
+      return False
+  def login(self, email, password):
+    self.cursor.execute("SELECT * FROM users WHERE email=? AND password=?", (email, password))
+    if self.cursor.fetchone() is not None:
+      return True
+    else:
+      return False
+  
   def add_message(self, message):
     self.cursor.execute("SELECT * FROM messages WHERE id=%s", (message.id,))
     if self.cursor.fetchone() is None:
@@ -66,4 +83,6 @@ class SQL_manager:
     self.cursor.execute("SELECT * FROM users INNER JOIN messages ON users.id = messages.author_id")
     return self.cursor.fetchall()
 
+tests = SQL_manager()
 
+print(tests)
