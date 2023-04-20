@@ -1,6 +1,8 @@
 from display import *
 from keys import *
+from SQL_manager import *
 
+user1 = SQL_manager()
 
 def main():
 
@@ -54,9 +56,11 @@ def main():
 
                 #LOGIN CLICK
                 if MOUSEBUTTONDOWN(event) and LOGIN_BUTTON.collidepoint(pygame.mouse.get_pos()):
-                    print('username: ', mail_fill)
-                    print('password: ', password_fill)
-
+                    
+                    if user1.login(mail_fill, password_fill):
+                        print('login')
+                        state = 'home'
+                    
         if state == 'create_account':
 
             display_register(mail_fill, mail_check, active_bar, password_fill, password_check, active_bar2,
@@ -96,6 +100,8 @@ def main():
                     print(
                         f'username: {mail_fill} password: {password_fill} first name: {first_name_fill} last name: {last_name_fill}'
                     )
+                    user1.create_user(first_name_fill, last_name_fill,  mail_fill, password_fill,)
+                    state = 'login'
 
                 if MOUSEBUTTONDOWN(event) and RETURN_BUTTON.collidepoint(pygame.mouse.get_pos()):
                     print('return')
